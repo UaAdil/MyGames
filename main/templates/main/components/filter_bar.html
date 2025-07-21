@@ -1,0 +1,78 @@
+<div class="relative">
+    <div class="flex flex-wrap justify-center mb-8 gap-3">
+        <button onclick="filterGames('all')" data-category="all"
+            class="filter-btn px-4 py-2 bg-indigo-500 text-white rounded-full text-sm">Все игры</button>
+
+        {% for cat in categories %}
+            <button onclick="filterGames('{{ cat.name }}')" data-category="{{ cat.name }}"
+                class="filter-btn px-4 py-2 border border-indigo-500 text-indigo-500 rounded-full text-sm">
+                {{ cat.name }}
+            </button>
+        {% endfor %}
+    </div>
+
+
+    <!-- КАРТОЧКИ -->
+    <div id="gameGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
+        {% for game in games %}
+            <div class="game-card"
+                 data-categories="{% for cat in game.categories.all %}{{ cat.name }}{% if not forloop.last %},{% endif %}{% endfor %}">
+                {% include 'main/components/card.html' %}
+            </div>
+
+        {% empty %}
+            <p class="text-gray-500 col-span-full text-center">Нет товаров в каталоге.</p>
+        {% endfor %}
+    </div>
+
+    <div class="absolute right-5 top-10 mt-2">
+        <a id="view-all-link"
+           href="{% url 'catalog' %}"
+           class="text-indigo-600 text-md hover:underline">
+            Показать все ➞
+        </a>
+    </div>
+</div>
+
+<script>
+    function filterGames(category) {
+    const cards = document.querySelectorAll('.game-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const categories = card.dataset.categories?.split(',').map(c => c.trim()) || [];
+        const matches = category === 'all' || categories.includes(category);
+
+        if (matches && visibleCount < 4) {
+            card.style.display = 'block';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Обновить активную кнопку
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        const btnCategory = btn.dataset.category;
+        if (btnCategory === category) {
+            btn.classList.add('bg-indigo-500', 'text-white');
+            btn.classList.remove('border', 'text-indigo-500', 'bg-white');
+        } else {
+            btn.classList.remove('bg-indigo-500', 'text-white');
+            btn.classList.add('border', 'border-indigo-500', 'text-indigo-500', 'bg-white');
+        }
+    });
+
+<!--    // Обновить ссылку "Показать все"-->
+<!--    const viewAllLink = document.getElementById('view-all-link');-->
+<!--    if (viewAllLink) {-->
+<!--        if (category === 'all') {-->
+<!--            viewAllLink.href = "{% url 'catalog' %}";-->
+<!--        } else {-->
+<!--            const query = new URLSearchParams({ category: category });-->
+<!--            viewAllLink.href = "{% url 'catalog' %}?" + query.toString();-->
+<!--        }-->
+<!--    }-->
+}
+
+</script>

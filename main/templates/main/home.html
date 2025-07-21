@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+
+<!-- Hero-слайдер -->
+    {% include 'main/components/hero-banner.html' %}
+
+
+    <h2 class="text-3xl font-bold text-center mb-8 mt-8">Новинки</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for game in new_games|slice:":4" %}
+            {% include 'main/components/card.html' %}
+        {% empty %}
+            <p>Нет новинок 😢</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="text-3xl font-bold text-center mb-8 mt-8">Хиты</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for game in best_games|slice:":4" %}
+            {% include 'main/components/card.html' %}
+        {% endfor %}
+    </div>
+
+    <h2 class="text-3xl font-bold text-center mb-8 mt-8">Каталог игр</h2>
+
+   {% include 'main/components/filter_bar.html' with categories=categories %}
+
+    <!-- Sale Section -->
+    {% include 'main/components/sale-section.html' %}
+
+    <!-- About Us -->
+
+
+{% endblock %}

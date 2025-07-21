@@ -1,0 +1,63 @@
+{% extends 'main/base.html' %}
+{% block title %}Каталог{% endblock %}
+{% block content %}
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8 text-center">Каталог настольных игр</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+        <!-- Sidebar -->
+        <aside class="md:col-span-1 bg-white p-6 rounded-xl shadow border border-gray-100 space-y-6">
+
+            <!-- Поиск -->
+            <form method="get" class="space-y-4">
+
+                <!-- Категории -->
+                <div>
+                    <h3 class="font-semibold text-red-500 mb-2">Категории</h3>
+                    <select name="category" class="w-full px-3 py-2 border rounded text-sm">
+                        <option value="">Все категории</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if selected_category == cat.id %}selected{% endif %}>
+                                {{ cat.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Сортировка -->
+                <div>
+                    <h3 class="font-semibold text-yellow-500 mb-2">Сортировка</h3>
+                    <select name="sort" class="w-full px-3 py-2 border rounded text-sm">
+                        <option value="">По умолчанию</option>
+                        <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Сначала дешевые</option>
+                        <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Сначала дорогие</option>
+                        <option value="new" {% if sort == 'new' %}selected{% endif %}>Новинки</option>
+                        <option value="discount" {% if sort == 'discount' %}selected{% endif %}>Со скидками</option>
+                    </select>
+                </div>
+
+                <!-- Кнопка -->
+                <button type="submit" class="w-full bg-red-500 hover:bg-yellow-500 text-white py-2 rounded font-semibold text-sm transition">
+                    Применить
+                </button>
+            </form>
+        </aside>
+
+        <!-- Товары -->
+        <section class="md:col-span-3">
+            {% if games %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for game in games %}
+                        {% include 'main/components/card.html' %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-gray-500 mt-12">Игры не найдены 😢</p>
+            {% endif %}
+        </section>
+    </div>
+</div>
+
+{% endblock %}

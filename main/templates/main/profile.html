@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-3xl">
+    <div class="bg-white rounded-xl shadow-lg p-8">
+
+        <!-- Аватар и имя -->
+        <div class="flex items-center gap-6 border-b pb-6">
+            <div class="bg-red-500 text-white w-20 h-20 flex items-center justify-center rounded-full text-3xl font-bold shadow-inner">
+                {{ user.username|slice:":1" | upper }}
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">{{ user.username }}</h1>
+                <p class="text-gray-500 text-sm">Пользователь с {{ user.date_joined|date:"d.m.Y" }}</p>
+            </div>
+        </div>
+
+        <!-- Информация -->
+        <div class="mt-6 space-y-4 text-gray-700">
+            <p><span class="font-semibold">Email:</span> {{ user.email }}</p>
+            <p><span class="font-semibold">Имя:</span> {{ user.first_name|default:"—" }}</p>
+            <p><span class="font-semibold">Фамилия:</span> {{ user.last_name|default:"—" }}</p>
+        </div>
+
+        <!-- Действия -->
+        <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#" class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded shadow text-sm">Изменить пароль</a>
+            <a href="/" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded shadow text-sm">На главную</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

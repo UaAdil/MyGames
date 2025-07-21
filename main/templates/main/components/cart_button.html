@@ -1,0 +1,7 @@
+
+<form action="{% url 'add_to_cart' game.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="bg-red-500 hover:bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg shadow text-sm">
+        В корзину
+    </button>
+</form>

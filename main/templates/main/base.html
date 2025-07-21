@@ -1,0 +1,250 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BoardGames{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal min-h-screen flex flex-col">
+
+    {% if messages %}
+        <div class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 space-y-2 w-full max-w-md px-4">
+            {% for message in messages %}
+                <div class="text-center px-4 py-3 rounded-lg shadow-md text-white transition-all duration-500 ease-in-out
+                    {% if message.tags == 'success' %} bg-green-500
+                    {% elif message.tags == 'error' %} bg-red-500
+                    {% elif message.tags == 'info' %} bg-yellow-500
+                    {% else %} bg-gray-800 {% endif %}"
+                    id="flash-message-{{ forloop.counter }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <script>
+            setTimeout(() => {
+                document.querySelectorAll("[id^='flash-message']").forEach(el => {
+                    el.style.opacity = "0";
+                    setTimeout(() => el.remove(), 500);
+                });
+            }, 4000);
+        </script>
+    {% endif %}
+
+
+
+    <!-- Навигация -->
+    <header class="shadow-md">
+        <div class="container mx-auto flex items-center justify-between p-4">
+
+            <!-- Логотип слева -->
+            <a href="/" class="text-2xl font-bold text-red-500"><span class="text-yellow-500">MY</span>GAMES</a>
+
+            <!-- Навигация по центру -->
+            <nav class="hidden md:flex space-x-8 text-gray-700 font-medium text-base">
+                <a href="/" class="hover:text-yellow-500">Главная</a>
+                <a href="/catalog/" class="hover:text-red-500">Каталог</a>
+                <a href="/contacts/" class="hover:text-yellow-500">Контакты</a>
+
+            </nav>
+
+            <div class="flex space-x-4 items-center text-gray-700">
+
+                 <!-- Избранное -->
+                <a href="/favorites/" class="hover:text-red-500" title="Избранное">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                    </svg>
+                </a>
+
+                <!-- Корзина -->
+                <a href="/cart/" class="hover:text-red-500 relative" title="Корзина">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-9 h-9 fill-current">
+                        <path d="M217.06543,146.8623l13.09082-72.00048A16.00086,16.00086,0,0,0,214.41406,56H46.67676L41.793,29.13818A15.9918,15.9918,0,0,0,26.05078,16H8A8,8,0,0,0,8,32H26.05078L52.75293,178.86182a16.0028,16.0028,0,0,0,1.187,3.76489A27.99341,27.99341,0,1,0,97.293,192H166.707A27.99678,27.99678,0,1,0,192,176H68.49512l-2.90918-16h135.7373A15.99184,15.99184,0,0,0,217.06543,146.8623ZM84,204a12,12,0,1,1-12-12A12.01343,12.01343,0,0,1,84,204Zm120,0a12,12,0,1,1-12-12A12.01343,12.01343,0,0,1,204,204ZM49.58594,72H214.41406l-13.09082,72H62.67676Z"/>
+                    </svg>
+                    <span id="cart-counter" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+                        0
+                    </span>
+                </a>
+
+                <!-- Авторизация -->
+                {% if user.is_authenticated %}
+
+                    <div class="relative group">
+
+                        <!-- Кнопка юзера -->
+                        <div class="flex items-center gap-2 border-2 border-gray-700 rounded-md p-1 cursor-pointer">
+                            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-current text-gray-700">
+                                <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z"/>
+                                <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z"/>
+                            </svg>
+                            <span class="text-sm text-gray-700 hidden md:inline">{{ user.username }}</span>
+                        </div>
+
+                        <!-- Выпадающее меню -->
+                        <div class="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 hidden group-hover:block">
+                            <a href="/profile/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Профиль</a>
+                            <a href="/favorites/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Избранное</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <form action="{% url 'logout' %}" method="post" class="px-4 pb-3">
+                                {% csrf_token %}
+                                <button type="submit" class="w-full text-left text-sm text-red-600 hover:underline">Выйти</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                {% else %}
+                    <a href="/auth/" class="hover:text-yellow-500" title="Войти">
+                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 fill-current">
+                            <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z"/>
+                            <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z"/>
+                        </svg>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Поисковая строка под навигацией -->
+        <div class="bg-gray-800 py-4 shadow-inner">
+            <div class="container mx-auto px-4 flex justify-center">
+                <form method="get" action="{% url 'catalog' %}" class="w-full max-w-2xl">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            name="q"
+                            placeholder="Найти настольную игру..."
+                            value="{{ request.GET.q|default:'' }}"
+                            class="w-full py-3 px-5 rounded-2xl shadow-lg text-gray-800 text-base focus:outline-none focus:ring-4 focus:ring-yellow-500 border border-red-500 placeholder-gray-400"
+                        >
+                        <button type="submit"
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-500 hover:bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-bold transition">
+                            🔍
+                        </button>
+
+                        <ul id="search-results" class="absolute left-0 right-0 top-full bg-white border border-gray-300 mt-1 rounded-lg shadow z-50 hidden"></ul>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </header>
+
+
+    <!-- Контент -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <a href="/" class="text-2xl font-bold text-red-500"><span class="text-yellow-500">MY</span>GAMES</a>
+                    <p class="text-gray-400">Ваш надежный магазин настольных игр с 2016 года</p>
+                </div>
+                <div>
+                    <h3 class="text-lg text-gray-200 font-bold mb-4">Информация</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">О компании</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Доставка и оплата</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Возврат и обмен</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg text-gray-200 font-bold mb-4">Каталог</h3>
+                    <ul class="space-y-2">
+                        {% for category in categories.all|slice:":4" %}
+                            <li>
+                                <a href="{% url 'catalog' %}?category={{ category.id }}" class="text-gray-400 hover:text-white transition">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+                <div>
+                    <h3 class="text-lg text-gray-200 font-bold mb-4">Контакты</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            <span>+7 (800) 555-35-35</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span>info@boardgames.ru</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>г. Алматы, ул. Биокомбинатская 9</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400">© 2025 MyGames. Все права защищены.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="https://www.instagram.com/mygames.kz" target="_blank" class="text-gray-300 hover:text-pink-600 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 24 24">
+                            <path d="M7.75 2C4.4 2 2 4.4 2 7.75v8.5C2 19.6 4.4 22 7.75 22h8.5C19.6 22 22 19.6 22 16.25v-8.5C22 4.4 19.6 2 16.25 2h-8.5zm0 1.5h8.5A4.75 4.75 0 0121 7.75v8.5A4.75 4.75 0 0116.25 21h-8.5A4.75 4.75 0 013 16.25v-8.5A4.75 4.75 0 017.75 3.5zM12 7a5 5 0 100 10 5 5 0 000-10zm0 1.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7zm4.25-.75a1 1 0 100 2 1 1 0 000-2z"/>
+                        </svg>
+                    </a>
+
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@mygames.kz" target="_blank" class="text-gray-300 hover:text-black transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 24 24">
+                            <path d="M12.48 2h2.64c.19 1.22.89 2.23 1.84 2.88.72.5 1.59.79 2.52.8v2.6a6.43 6.43 0 01-3.5-1.04v7.33a5.98 5.98 0 11-6.1-5.95v2.59a3.38 3.38 0 103.1 3.36V2z"/>
+                        </svg>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/77001234567" target="_blank" class="text-gray-300 hover:text-green-600 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 24 24">
+                            <path d="M20.52 3.48A11.78 11.78 0 0012 0C5.38 0 0 5.38 0 12c0 2.1.54 4.15 1.56 5.96L0 24l6.22-1.63a11.93 11.93 0 005.78 1.47h.01c6.63 0 12-5.38 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 21.5a9.5 9.5 0 01-4.83-1.31l-.35-.2-3.7.96.99-3.6-.23-.37A9.48 9.48 0 012.5 12a9.5 9.5 0 1119 0c0 5.25-4.26 9.5-9.5 9.5zm5.33-6.93c-.29-.15-1.71-.84-1.97-.94-.26-.1-.45-.15-.63.15-.18.29-.72.94-.89 1.13-.16.18-.33.2-.62.07-.29-.14-1.21-.44-2.3-1.42-.85-.76-1.42-1.7-1.58-1.98-.16-.29-.02-.44.12-.58.12-.12.29-.33.43-.5.14-.17.18-.29.28-.48.1-.2.05-.36-.02-.51-.08-.14-.63-1.52-.86-2.1-.23-.55-.46-.47-.63-.47h-.54c-.2 0-.52.08-.79.36s-1.04 1.02-1.04 2.48 1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.48.71.31 1.27.49 1.7.62.71.23 1.36.2 1.88.12.58-.09 1.71-.7 1.95-1.37.24-.66.24-1.23.17-1.37-.08-.13-.26-.2-.54-.35z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper(".mySwiper", {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    </script>
+
+
+</body>
+
+<script src="{% static 'main/js/script.js' %}"></script>
+</html>

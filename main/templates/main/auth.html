@@ -1,0 +1,103 @@
+{% extends 'main/base.html' %}
+{% load form_tags %}
+
+{% block title %}Вход и регистрация{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow mt-3">
+
+    <!-- Переключатели -->
+    <div class="flex justify-center mb-6">
+        <button onclick="showForm('login')" id="btn-login"
+                class="text-sm font-bold px-4 py-2 rounded-l-lg bg-yellow-500 text-white hover:bg-yellow-600">
+            Вход
+        </button>
+        <button onclick="showForm('register')" id="btn-register"
+                class="text-sm font-bold px-4 py-2 rounded-r-lg bg-gray-200 hover:bg-red-500 hover:text-white">
+            Регистрация
+        </button>
+    </div>
+
+    <!-- Вход -->
+    <div id="login-form">
+        <h2 class="text-xl font-bold mb-4 text-yellow-500 text-center">Вход</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="login" value="1">
+
+            <div class="mb-4">
+                <label class="block font-medium mb-1 text-gray-700">Имя пользователя</label>
+                {{ login_form.username|add_class:"w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition" }}
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-medium mb-1 text-gray-700">Пароль</label>
+                {{ login_form.password|add_class:"w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition" }}
+            </div>
+
+            <button type="submit" class="w-full bg-yellow-500 hover:bg-red-500 text-white py-2 rounded-lg">
+                Войти
+            </button>
+        </form>
+    </div>
+
+    <!-- Регистрация -->
+    <div id="register-form" class="hidden">
+        <h2 class="text-xl font-bold mb-4 text-red-500 text-center">Регистрация</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="register" value="1">
+
+            <div class="mb-4">
+                <label class="block font-medium mb-1 text-gray-700">Имя пользователя</label>
+                {{ reg_form.username|add_class:"w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-yellow-500 transition" }}
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-medium mb-1 text-gray-700">Email</label>
+                {{ reg_form.email|add_class:"w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-yellow-500 transition" }}
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-medium mb-1 text-gray-700">Пароль</label>
+                {{ reg_form.password|add_class:"w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-yellow-500 transition" }}
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-medium mb-1 text-gray-700">Повторите пароль</label>
+                {{ reg_form.password2|add_class:"w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-yellow-500 transition" }}
+            </div>
+
+            <button type="submit" class="w-full bg-red-500 hover:bg-yellow-500 text-white py-2 rounded-lg">
+                Зарегистрироваться
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Скрипт переключения -->
+<script>
+    function showForm(type) {
+        const login = document.getElementById('login-form');
+        const register = document.getElementById('register-form');
+        const btnLogin = document.getElementById('btn-login');
+        const btnRegister = document.getElementById('btn-register');
+
+        if (type === 'login') {
+            login.classList.remove('hidden');
+            register.classList.add('hidden');
+            btnLogin.classList.add('bg-yellow-500', 'text-white');
+            btnLogin.classList.remove('bg-gray-200');
+            btnRegister.classList.remove('bg-red-500', 'text-white');
+            btnRegister.classList.add('bg-gray-200');
+        } else {
+            login.classList.add('hidden');
+            register.classList.remove('hidden');
+            btnRegister.classList.add('bg-red-500', 'text-white');
+            btnRegister.classList.remove('bg-gray-200');
+            btnLogin.classList.remove('bg-yellow-500', 'text-white');
+            btnLogin.classList.add('bg-gray-200');
+        }
+    }
+</script>
+{% endblock %}

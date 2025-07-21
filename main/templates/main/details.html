@@ -1,0 +1,136 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ game.name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+
+
+    <!-- Хлебные крошки -->
+    <nav class="text-sm text-gray-500 mb-4">
+        <a href="/" class="hover:text-red-500">Главная</a> /
+        <a href="/catalog/" class="hover:text-red-500">Каталог</a> /
+        <span class="text-gray-700">{{ game.name }}</span>
+    </nav>
+
+    <!-- Основной блок -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white rounded-xl shadow-lg p-6">
+
+        <!-- Изображение -->
+        <div>
+            <div class="border rounded-lg p-4 bg-gray-50 shadow-sm">
+                {% if game.image %}
+                    <img src="{{ game.image.url }}" alt="{{ game.name }}" class="w-full object-contain max-h-96 mx-auto">
+                {% else %}
+                    <div class="h-64 flex items-center justify-center bg-gray-100 text-gray-500">Нет изображения</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Информация -->
+        <div>
+            <h1 class="text-3xl font-bold mb-4 text-gray-800">{{ game.name }}</h1>
+
+            <div class="flex items-center flex-wrap space-x-4 mb-4 text-sm text-gray-600">
+                {% if game.is_new %}
+                    <span class="bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">Новинка</span>
+                {% endif %}
+                <span>{{ game.players }} игроков</span>
+                <span>{{ game.duration }} мин</span>
+                <span>{{ game.age }}+</span>
+            </div>
+
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="text-3xl font-extrabold text-gray-700">{{ game.price }} ₸</div>
+                {% if game.discount_percent > 0 %}
+                    <span class="bg-yellow-500 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full">-{{ game.discount_percent }}%</span>
+                {% endif %}
+            </div>
+
+            <div class="flex space-x-4 mb-6">
+                <a href="{% url 'add_to_cart' game.pk %}" class="bg-red-500 hover:bg-yellow-500 text-white font-semibold py-3 px-6 rounded-lg shadow transition">В корзину</a>
+                <a href="{% url 'toggle_favorite' game.pk %}" class="border border-red-500 text-red-500 hover:bg-red-50 font-semibold py-3 px-6 rounded-lg">
+                    {% if game.pk|stringformat:"s" in request.session.favorites %}
+                        В избранное ❤
+                    {% else %}
+                        Убрать из ❤
+                    {% endif %}
+                </a>
+            </div>
+
+            <ul class="mb-6 text-gray-500 text-sm leading-relaxed">
+                <li>✅ Самовывоз: бесплатно</li>
+                <li>🚚 Доставка: от 1500 ₸</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- Табуляция -->
+    <div class="mt-12 bg-white rounded-xl p-6 shadow">
+
+        <div class="border-b flex space-x-8 text-sm font-semibold text-gray-600 mb-4">
+            <button class="py-3 px-2 border-b-2 border-red-500 text-red-500" onclick="showTab('description')">Описание</button>
+            <button class="py-3 px-2 hover:text-red-500" onclick="showTab('rules')">Правила</button>
+            <button class="py-3 px-2 hover:text-red-500" onclick="showTab('reviews')">Отзывы (0)</button>
+            <button class="py-3 px-2 hover:text-red-500" onclick="showTab('questions')">Вопросы (0)</button>
+        </div>
+
+        <div class="mt-4 text-gray-700 leading-relaxed">
+
+            <div id="description" class="tab-content">
+                <h2 class="text-xl font-bold mb-2 text-gray-800">Описание</h2>
+                <p>{{ game.description }}</p>
+            </div>
+
+            <div id="rules" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-2 text-gray-800">Правила игры</h2>
+                <p>Правила можно скачать или прочитать здесь...</p>
+            </div>
+
+            <div id="reviews" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-2 text-gray-800">Отзывы</h2>
+                <p>Пока нет отзывов.</p>
+            </div>
+
+            <div id="questions" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-2 text-gray-800">Вопросы</h2>
+                <p>Пока нет вопросов.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Похожие игры -->
+    <div class="mt-12">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Похожие игры</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {% for similar_game in similar_games %}
+                <a href="{% url 'game_detail' similar_game.pk %}" class="block bg-white rounded-lg p-4 shadow hover:shadow-md transition">
+                    <img src="{{ similar_game.image.url }}" alt="{{ similar_game.name }}" class="h-32 object-contain mx-auto mb-2">
+                    <div class="text-center text-sm font-semibold text-gray-800">{{ similar_game.name }}</div>
+                    <div class="text-center text-red-500 font-bold">{{ similar_game.price }} ₸</div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function showTab(tabId) {
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.add('hidden', 'opacity-0'));
+
+        const activeTab = document.getElementById(tabId);
+        activeTab.classList.remove('hidden');
+        setTimeout(() => activeTab.classList.remove('opacity-0'), 10);
+
+        const buttons = document.querySelectorAll('button[onclick^="showTab"]');
+        buttons.forEach(btn => btn.classList.remove('border-red-500', 'text-red-500'));
+        event.target.classList.add('border-red-500', 'text-red-500');
+    }
+</script>
+
+{% endblock %}

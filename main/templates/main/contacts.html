@@ -1,0 +1,83 @@
+{% extends 'main/base.html' %}
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-4">
+
+
+    <h1 class="text-4xl font-bold text-center mb-6">Свяжитесь с нами</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Карта или форма -->
+        <div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1534.1642037040483!2d76.91235600459137!3d43.2384486127171!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38836919d7d9f5f5%3A0x638dd3d3ac90eb0a!2z0JDQvdGC0LjQutCw0YTQtSBNWVJPT00!5e0!3m2!1sru!2skz!4v1752401080012!5m2!1sru!2skz" width="600" height="350" style="border: 2px solid gray; border-radius: 10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <!-- Контактная информация -->
+        <div>
+            <h2 class="text-2xl font-semibold text-red-500 mb-4">Контактная информация</h2>
+            <p class="mb-2"><strong>Адрес:</strong> г. Алматы, ул. Биокомбинатская 9 </p>
+            <p class="mb-2"><strong>Телефон:</strong> <a href="tel:+77001234567" class="text-indigo-600 hover:underline">+7 (700) 123-45-67</a></p>
+            <p class="mb-2"><strong>Email:</strong> <a href="mygames@gmail.com" class="text-indigo-600 hover:underline">mygames@gmail.com</a></p>
+            <p class="mb-2"><strong>Время работы:</strong> Пн–Пт: 10:00 – 19:00</p>
+
+            <div class="flex space-x-6 text-2xl">
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/mygames.kz" target="_blank" class="text-pink-500 hover:text-pink-600 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 24 24">
+                        <path d="M7.75 2C4.4 2 2 4.4 2 7.75v8.5C2 19.6 4.4 22 7.75 22h8.5C19.6 22 22 19.6 22 16.25v-8.5C22 4.4 19.6 2 16.25 2h-8.5zm0 1.5h8.5A4.75 4.75 0 0121 7.75v8.5A4.75 4.75 0 0116.25 21h-8.5A4.75 4.75 0 013 16.25v-8.5A4.75 4.75 0 017.75 3.5zM12 7a5 5 0 100 10 5 5 0 000-10zm0 1.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7zm4.25-.75a1 1 0 100 2 1 1 0 000-2z"/>
+                    </svg>
+                </a>
+
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com/@mygames.kz" target="_blank" class="text-gray-900 hover:text-black transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 24 24">
+                        <path d="M12.48 2h2.64c.19 1.22.89 2.23 1.84 2.88.72.5 1.59.79 2.52.8v2.6a6.43 6.43 0 01-3.5-1.04v7.33a5.98 5.98 0 11-6.1-5.95v2.59a3.38 3.38 0 103.1 3.36V2z"/>
+                    </svg>
+                </a>
+
+                <!-- WhatsApp -->
+                <a href="https://wa.me/77001234567" target="_blank" class="text-green-500 hover:text-green-600 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 24 24">
+                        <path d="M20.52 3.48A11.78 11.78 0 0012 0C5.38 0 0 5.38 0 12c0 2.1.54 4.15 1.56 5.96L0 24l6.22-1.63a11.93 11.93 0 005.78 1.47h.01c6.63 0 12-5.38 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 21.5a9.5 9.5 0 01-4.83-1.31l-.35-.2-3.7.96.99-3.6-.23-.37A9.48 9.48 0 012.5 12a9.5 9.5 0 1119 0c0 5.25-4.26 9.5-9.5 9.5zm5.33-6.93c-.29-.15-1.71-.84-1.97-.94-.26-.1-.45-.15-.63.15-.18.29-.72.94-.89 1.13-.16.18-.33.2-.62.07-.29-.14-1.21-.44-2.3-1.42-.85-.76-1.42-1.7-1.58-1.98-.16-.29-.02-.44.12-.58.12-.12.29-.33.43-.5.14-.17.18-.29.28-.48.1-.2.05-.36-.02-.51-.08-.14-.63-1.52-.86-2.1-.23-.55-.46-.47-.63-.47h-.54c-.2 0-.52.08-.79.36s-1.04 1.02-1.04 2.48 1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.48.71.31 1.27.49 1.7.62.71.23 1.36.2 1.88.12.58-.09 1.71-.7 1.95-1.37.24-.66.24-1.23.17-1.37-.08-.13-.26-.2-.54-.35z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-md">
+                <div class="bg-indigo-100 p-3 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Бесплатная доставка</h3>
+                <p class="text-gray-600">При заказе от 3000 рублей доставка бесплатная по всей России</p>
+            </div>
+            <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-md">
+                <div class="bg-indigo-100 p-3 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Гарантия качества</h3>
+                <p class="text-gray-600">Мы тщательно проверяем все игры перед отправкой</p>
+            </div>
+            <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-md">
+                <div class="bg-indigo-100 p-3 rounded-full mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Быстрая доставка</h3>
+                <p class="text-gray-600">Отправляем заказы в день оформления</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
